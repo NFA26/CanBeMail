@@ -111,8 +111,6 @@ class sendMailController():
             events,values=view.read()
             if (events =='Go Back'):
                 view.close()
-                main=mpc.MainPageController(self.mail_address,self.passw)
-                main.openPage()
                 break
             elif (events == 'Send Mail' ):
                 if(values['To'].strip() == ''):
