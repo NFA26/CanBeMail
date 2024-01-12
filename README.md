@@ -16,9 +16,12 @@ By running the following comment in terminal or in an IDE, you can install the r
 *To install all the required packages at once: 
 pip install -r requirements.txt
 
-
 ##Before Start
 You need to add database details to the code for your usage.
 
 At CanBeMail/Controller/MainPageController.py Line 25
 You need to write your own database information.
+
+Finally, by running the following command, you can run the app or if you use an IDE, you can directly click on the "run" button at "Launcher.py" page.
+python launcher.py 
+
