@@ -60,31 +60,21 @@ class InboxController():
         self.prKey=keyyy
 
     def prEncode(self, body):
-        print("1")
         private_key=RSA.import_key(self.prKey)
-        print("2")
         enc_session_key = body[:private_key.size_in_bytes()]
-        print(enc_session_key)
         nonce = body[private_key.size_in_bytes():private_key.size_in_bytes()+16]
-        print("4")
         tag = body[private_key.size_in_bytes()+16:private_key.size_in_bytes()+16+16]
-        print("5")
         ciphertext = body[private_key.size_in_bytes()+16+16:]
-        print("6")	
+
         #### RSA decrypt
         cipher_rsa = PKCS1_OAEP.new(private_key)
-        print("7")
         session_key = cipher_rsa.decrypt(enc_session_key)
-        print("8")
         #### AES decrypt	
         cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
-        print("9")
         data = cipher_aes.decrypt_and_verify(ciphertext, tag)
-        print("10")
         return data.decode("utf-8")    
 
     def encdecoder(self, text):
-        print("Decrypting text:", text)
 
         try:
             # Extract key (modify based on your key retrieval method)
@@ -96,7 +86,6 @@ class InboxController():
             # Decode after decryption
             decrypted_string = decrypted_bytes.decode()
 
-            print("Decrypted string:", decrypted_string)
             return decrypted_string
 
         except InvalidToken as e:
@@ -138,13 +127,10 @@ class InboxController():
                                 self.mailssub.append(mailunit)
                                 if "CanBeMail:" in subject:
                                     try:
-                                        print("bura")
+
                                         body=self.prEncode(body)
-                                        print("if CanBeMail in subject")
                                         nbody=self.encdecoder(body)
-                                        print("if CanBeMail in subject 2")
                                         self.maildic[mailunit]= nbody
-                                        print("if CanBeMail in subject 3")
                                     except Exception as e:
                                         print(e)
                                         pass
@@ -166,11 +152,8 @@ class InboxController():
                                     a=body.split("//")
                                     k=int(a[0]).to_bytes(int(a[1]),'little')
                                     body=self.prEncode(k)
-                                    print("if CanBeMail in subject 4")
                                     nbody=self.encdecoder(body)
-                                    print("if CanBeMail in subject 5")
                                     self.maildic[mailunit]= nbody
-                                    print("if CanBeMail in subject 6")
                                 except Exception as e:
                                     print(e)
                                     pass
@@ -191,7 +174,6 @@ class InboxController():
                 self.mailssub=[]
                 self.maildic={}
                 self.InboxRead(1,25)
-                print("inbox called")
                 inb.get_mails(view,self.mailssub)    
             elif(events=='Exit'):
                 view.close()
@@ -199,11 +181,8 @@ class InboxController():
             elif(events=='Read Selected Mail'):
                 try:
                     txtToRead=self.maildic[values['ListBox'][0]]
-                    print("read selected mail called")
                     mailview=smc.SingleMailController(txtToRead)
-                    print("singlemailcontroller txtToRead")
                     mailview.openPage()
-                    print("a")
                 except:
                     mailview=smc.SingleMailController("Can't readable from this app.")
                     mailview.openPage()
