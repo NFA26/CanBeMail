@@ -1,0 +1,4 @@
+PySimpleGUI
+mysql-connector
+pycryptodome
+cryptography
